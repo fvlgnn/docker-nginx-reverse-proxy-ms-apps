@@ -1,0 +1,60 @@
+name: nginx-reverse-proxy-demo
+
+services:
+  app-fe:
+    build:
+      context: app-fe
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--spider", "http://127.0.0.1:8080/"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+
+  app-be:
+    image: ghcr.io/fvlgnn/go-mock-api-server:1.0.0
+    environment:
+      CONFIG_DIR: /config
+      SERVER_PORT: "8080"
+    volumes:
+      - ./app-be:/config:ro
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+
+  nginx:
+    build:
+      context: nginx-reverse-proxy
+    depends_on:
+      app-fe:
+        condition: service_healthy
+      app-be:
+        condition: service_healthy
+    environment:
+      CORS_ORIGIN: "${CORS_ORIGIN:-http://localhost:5173}"
+      NGINX_ENVSUBST_FILTER: "^CORS_ORIGIN$"
+      NGINX_ENVSUBST_OUTPUT_DIR: /tmp
+    ports:
+      - "8000:8080"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--spider", "http://127.0.0.1:8080/healthz"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true

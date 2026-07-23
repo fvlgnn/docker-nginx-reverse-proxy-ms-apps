@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/users"
+  },
+  "response": {
+    "status": 201,
+    "headers": {
+      "Cache-Control": "no-store",
+      "Location": "/v1/users/4",
+      "X-Mock-Server": "go-mock-api-server"
+    },
+    "body": {
+      "id": 4,
+      "name": "New user",
+      "location": "Unknown"
+    }
+  }
+}

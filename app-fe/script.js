@@ -1,32 +1,35 @@
-// Seleziona il pulsante e l'elemento in cui mostrare i dati
 const button = document.getElementById('fetch-data-btn');
 const outputDiv = document.getElementById('json-output');
 
-// Aggiungi un event listener al pulsante per avviare la chiamata AJAX
-button.addEventListener('click', () => {
-    // Creare un nuovo oggetto XMLHttpRequest
-    const xhr = new XMLHttpRequest();
+button.addEventListener('click', async () => {
+    button.disabled = true;
+    outputDiv.textContent = 'Caricamento…';
 
-    // Specificare il tipo di richiesta e l'URL del server
-    xhr.open('GET', 'http://localhost:8000/app-be/v1/get/1', true);
-
-    // Definire cosa fare quando la risposta è pronta
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            // Analizza la risposta JSON
-            const jsonResponse = JSON.parse(xhr.responseText);
-            
-            // Mostra il contenuto JSON sulla pagina
-            outputDiv.innerHTML = `
-                <p><strong>ID:</strong> ${jsonResponse.id}</p>
-                <p><strong>Name:</strong> ${jsonResponse.name}</p>
-                <p><strong>Location:</strong> ${jsonResponse.location}</p>
-            `;
-        } else {
-            outputDiv.textContent = 'Errore nella richiesta: ' + xhr.status;
+    try {
+        const response = await fetch('/app-be/v1/users/1', {
+            headers: { Accept: 'application/json' }
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
         }
-    };
 
-    // Invia la richiesta
-    xhr.send();
+        const user = await response.json();
+        outputDiv.replaceChildren();
+        const fields = [
+            ['ID', user.id],
+            ['Nome', user.name],
+            ['Località', user.location]
+        ];
+        for (const [label, value] of fields) {
+            const paragraph = document.createElement('p');
+            const strong = document.createElement('strong');
+            strong.textContent = `${label}: `;
+            paragraph.append(strong, document.createTextNode(String(value)));
+            outputDiv.append(paragraph);
+        }
+    } catch (error) {
+        outputDiv.textContent = `Richiesta non riuscita: ${error.message}`;
+    } finally {
+        button.disabled = false;
+    }
 });

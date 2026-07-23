@@ -1,0 +1,28 @@
+version: 2
+updates:
+  - package-ecosystem: docker-compose
+    directory: /
+    schedule:
+      interval: semiannually
+    groups:
+      container-images:
+        patterns:
+          - "*"
+  - package-ecosystem: docker
+    directories:
+      - /app-fe
+      - /nginx-reverse-proxy
+    schedule:
+      interval: semiannually
+    groups:
+      nginx-images:
+        patterns:
+          - "*"
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: semiannually
+    groups:
+      actions:
+        patterns:
+          - "*"

@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/users"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Cache-Control": "no-store",
+      "X-Mock-Server": "go-mock-api-server"
+    },
+    "body": {
+      "items": [
+        { "id": 1, "name": "Ada Lovelace", "location": "London" },
+        { "id": 2, "name": "Grace Hopper", "location": "New York" },
+        { "id": 3, "name": "Edsger Dijkstra", "location": "Nuenen" }
+      ],
+      "total": 3
+    }
+  }
+}

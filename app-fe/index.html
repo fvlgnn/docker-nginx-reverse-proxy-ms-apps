@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AJAX e JSON</title>
+    <title>NGINX reverse proxy demo</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>Chiamata AJAX e Risposta JSON</h1>
+        <h1>NGINX reverse proxy demo</h1>
     </header>
 
     <main>
-        <button id="fetch-data-btn">Ottieni Dati</button>
-        <div id="json-output"></div>
+        <p>Il frontend interroga il mock backend attraverso NGINX.</p>
+        <button id="fetch-data-btn" type="button">Ottieni dati</button>
+        <div id="json-output" aria-live="polite"></div>
     </main>
 
     <script src="script.js"></script>
