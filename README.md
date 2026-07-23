@@ -161,7 +161,7 @@ mock.
 ## Validazione
 
 ```sh
-find app-be -name '*.json' -print0 | xargs -0 -n1 jq --exit-status empty
+jq empty app-be/*.json
 docker compose config --quiet
 docker compose build
 docker compose up --wait
